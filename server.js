@@ -22,6 +22,8 @@ let clients = []; // liste des navigateurs connectés
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress;
   console.log(`Nouvelle connexion depuis ${ip}`);
+  
+  console.log(message);
 
   // Identification du type de client (Arduino ou Frontend)
   ws.on('message', (message) => {
