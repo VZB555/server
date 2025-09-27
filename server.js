@@ -32,6 +32,7 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'arduino') {
         arduinoSocket = ws;
         console.log("Arduino connecté !");
+		console.log(data.temperature);
         ws.send(JSON.stringify({ type: 'server', msg: 'Arduino connecté au serveur' }));
       }
 
