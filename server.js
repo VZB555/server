@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000; // correction pour Render
 app.use(express.static(path.join(__dirname, 'public')));
 
 const server = app.listen(PORT, () => {
-  console.log(`Serveur web en ligne sur http://localhost:${PORT}`);
+  console.log(`Serveur web  VICTOR en ligne sur http://localhost:${PORT}`);
 });
 
 // === SERVEUR WEBSOCKET ===
