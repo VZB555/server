@@ -3,7 +3,7 @@ const WebSocket = require('ws');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // correction pour Render
 
 // === SERVEUR HTTP POUR LE FRONTEND ===
 app.use(express.static(path.join(__dirname, 'public')));
