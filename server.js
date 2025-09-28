@@ -2,6 +2,11 @@ const express = require('express');
 const WebSocket = require('ws');
 const path = require('path');
 
+const supabaseUrl = "https://gpbvhgglhpdjhijyoekc.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwYnZoZ2dsaHBkamhpanlvZWtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc3ODAxNTQsImV4cCI6MjA3MzM1NjE1NH0.yUDGxkm9ikcRMcL5J995mYFtr6kUNvv7Yc8GUGiYNHU"; 
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+
 const app = express();
 const PORT = process.env.PORT || 3000; // correction pour Render
 
@@ -38,6 +43,14 @@ wss.on('connection', (ws, req) => {
 		console.log(data.temp);
 		console.log(data.hum);
         ws.send(JSON.stringify({ type: 'server', msg: 'Arduino connecté au serveur' }));
+		
+		
+		  const { error } = await supabase
+		.from('RT_LOGGER')
+		.insert([
+		{ device: data.mac,  temp: data.temp, hum: data.hum  }  // champs adaptés à ta table
+		]);
+	
       }
 
       // Identification Frontend
