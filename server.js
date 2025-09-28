@@ -44,7 +44,7 @@ wss.on('connection', (ws, req) => {
         console.log("✅ Arduino connecté !");
         console.log("MAC:", data.mac, "Temp:", data.temp, "Hum:", data.hum);
 
-        ws.send(JSON.stringify({ type: 'server', msg: '10000' }));
+        ws.send(JSON.stringify({ type: 'server', msg: '100000' }));
 
         // Insertion dans Supabase
         const { error } = await supabase
