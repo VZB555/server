@@ -3,10 +3,14 @@ const WebSocket = require('ws');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
-// === SUPABASE ===
+
+
 const supabaseUrl = "https://gpbvhgglhpdjhijyoekc.supabase.co";
-const supabaseKey = "TON_CLE_API"; // ⚠️ Mets ta clé
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwYnZoZ2dsaHBkamhpanlvZWtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc3ODAxNTQsImV4cCI6MjA3MzM1NjE1NH0.yUDGxkm9ikcRMcL5J995mYFtr6kUNvv7Yc8GUGiYNHU"; 
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
