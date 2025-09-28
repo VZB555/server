@@ -36,6 +36,7 @@ wss.on('connection', (ws, req) => {
         console.log("Arduino connecté !");
 		console.log(data.mac);
 		console.log(data.temp);
+		console.log(data.hum);
         ws.send(JSON.stringify({ type: 'server', msg: 'Arduino connecté au serveur' }));
       }
 
