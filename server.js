@@ -42,7 +42,7 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'arduino') {
         arduinoSocket = ws;
         console.log("✅ Arduino connecté !");
-        console.log("MAC:", data.mac, "Temp:", data.temp, "Hum:", data.hum);
+        console.log("MAC:", data.mac, "Temp:", data.temp, "Hum:", data.hum , "Ring:" , data.ring);
 
         ws.send(JSON.stringify({ type: 'server', msg: '100000' }));
 
