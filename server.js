@@ -47,7 +47,7 @@ wss.on('connection', (ws, req) => {
         ws.send(JSON.stringify({ type: 'server', msg: '100000' }));
 
 /* TELEGRAM */
-
+	if (data.ring === '1') {
 		const BOT_TOKEN = "8211651169:AAEZWvA_ShQErMaTytB5f5vH_dBorDDj0ng";   // ton token BotFather
 		const CHAT_ID = "578740783";          // ton chat_id
 		const MESSAGE = "Sonnerie a Nordmann";
@@ -60,6 +60,7 @@ wss.on('connection', (ws, req) => {
           text: MESSAGE
         })
       })
+	}
 
 /* FIN TELEGRAM */
 
