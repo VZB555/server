@@ -49,6 +49,7 @@ wss.on('connection', (ws, req) => {
 		console.log(data.mac);
 		console.log(data.V);
 		console.log(data.Ack);
+		console.log(data.ring);
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
