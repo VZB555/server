@@ -18,6 +18,8 @@ const wss = new WebSocket.Server({ server });
 // Gestion des connexions
 let arduinoSocket = null; // stocke la connexion Arduino
 let clients = []; // liste des navigateurs connectés
+let lastSensorUpdateTime = null;
+
 
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress;
@@ -44,8 +46,12 @@ wss.on('connection', (ws, req) => {
 
       // Message de l'Arduino → envoyer à tous les navigateurs
       else if (data.type === 'sensor_update') {
+		lastSensorUpdateTime = new Date().toISOString();
+		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
+		
 		arduinoSocket = ws;
-        console.log("Arduino connecté !");
+        
+		console.log("Arduino connecté !");
 		console.log(data.mac);
 		console.log(data.V);
 		console.log(data.Ack);
@@ -53,7 +59,7 @@ wss.on('connection', (ws, req) => {
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
-            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: data.V , Ack: data.Ack   }));
+            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: data.V , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
           }
         });
       }
