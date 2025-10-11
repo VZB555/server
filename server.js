@@ -52,7 +52,7 @@ wss.on('connection', (ws, req) => {
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
-            client.send(JSON.stringify({ type: 'arduino_data', payload: data.mac }));
+            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: data.V , Ack: data.Ack   }));
           }
         });
       }
