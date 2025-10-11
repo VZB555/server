@@ -44,6 +44,9 @@ wss.on('connection', (ws, req) => {
 
       // Message de l'Arduino → envoyer à tous les navigateurs
       else if (data.type === 'sensor_update') {
+		arduinoSocket = ws;
+        console.log("Arduino connecté !");
+		
 		console.log(data.mac);
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
