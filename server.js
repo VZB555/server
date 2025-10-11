@@ -47,7 +47,8 @@ wss.on('connection', (ws, req) => {
 		console.log(data.mac);
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'arduino_data', payload: data.etat }));
+			console.log("envoi de la Mac addreess au browser");
+            client.send(JSON.stringify({ type: 'arduino_data', payload: data.mac }));
           }
         });
       }
@@ -55,7 +56,7 @@ wss.on('connection', (ws, req) => {
       // Message du navigateur → envoyer à l'Arduino
       else if (data.type === 'command') {
         if (arduinoSocket && arduinoSocket.readyState === WebSocket.OPEN) {
-          arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.mac }));
+          arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
         }
       }
 
