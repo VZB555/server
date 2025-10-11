@@ -56,7 +56,9 @@ wss.on('connection', (ws, req) => {
       // Message du navigateur → envoyer à l'Arduino
       else if (data.type === 'command') {
         if (arduinoSocket && arduinoSocket.readyState === WebSocket.OPEN) {
-          arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
+          console.log("message du brower recu)";
+		  console.log(data.payload);
+		  arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
         }
       }
 
