@@ -19,7 +19,7 @@ const wss = new WebSocket.Server({ server });
 let arduinoSocket = null; // stocke la connexion Arduino
 let clients = []; // liste des navigateurs connectés
 let lastSensorUpdateTime = null;
-
+let lastVersion = null; 
 
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress;
@@ -41,7 +41,8 @@ wss.on('connection', (ws, req) => {
       else if (data.type === 'browser') {
         clients.push(ws);
         console.log("Navigateur connecté !");
-        ws.send(JSON.stringify({ type: 'server', msg: 'Navigateur connecté au serveur' }));
+        ws.send(JSON.stringify({ type: 'server', msg: 'Navigateur connecté au serveur' , V: lastVersion , lastUpdate: lastSensorUpdateTime }));
+	
       }
 
       // Message de l'Arduino → envoyer à tous les navigateurs
@@ -67,7 +68,7 @@ wss.on('connection', (ws, req) => {
 		/* FIN TELEGRAM */
 		  
 		  
-		  
+		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
 		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
 		
@@ -81,7 +82,7 @@ wss.on('connection', (ws, req) => {
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
-            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: data.V , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
+            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
           }
         });
 		
