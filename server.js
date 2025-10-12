@@ -61,6 +61,8 @@ wss.on('connection', (ws, req) => {
 			  text: MESSAGE
 			})
 		  })
+		  
+		  console.log("Message Telegram Sonnerie");  
 		}
 		/* FIN TELEGRAM */
 		  
