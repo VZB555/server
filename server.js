@@ -46,6 +46,26 @@ wss.on('connection', (ws, req) => {
 
       // Message de l'Arduino → envoyer à tous les navigateurs
       else if (data.type === 'sensor_update') {
+		  
+		/* TELEGRAM */
+		if (data.ring === 1) {
+			const BOT_TOKEN = "8211651169:AAEZWvA_ShQErMaTytB5f5vH_dBorDDj0ng";   // ton token BotFather
+			const CHAT_ID = "578740783";          // ton chat_id
+			const MESSAGE = "Sonnerie a Nordmann";
+			
+			fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+			  chat_id: CHAT_ID,
+			  text: MESSAGE
+			})
+		  })
+		}
+		/* FIN TELEGRAM */
+		  
+		  
+		  
 		lastSensorUpdateTime = new Date().toISOString();
 		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
 		
