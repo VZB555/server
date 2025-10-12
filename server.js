@@ -84,6 +84,8 @@ wss.on('connection', (ws, req) => {
             client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: data.V , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
           }
         });
+		
+		arduinoSocket.send(JSON.stringify({ type: 'command', payload: 'recu du server' }));
       }
 
       // Message du navigateur → envoyer à l'Arduino
