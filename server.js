@@ -45,11 +45,11 @@ wss.on('connection', (ws, req) => {
 
 /* NEW */ 	
 
-        if (!mac) return console.error("Browser sans MAC !");
-        if (!browsers[mac]) browsers[mac] = [];
-        browsers[mac].push(ws);
+        if (!data.mac) return console.error("Browser sans MAC !");
+        if (!browsers[data.mac]) browsers[data.mac] = [];
+        browsers[data.mac].push(ws);
 
-        console.log(`🧭 Navigateur connecté pour Arduino ${mac}`);
+        console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
    //   ws.send(JSON.stringify({ type: 'server', msg: `Navigateur lié à ${mac}` }));	
 	  
 /* FIN NEW */ 		  
