@@ -72,9 +72,9 @@ wss.on('connection', (ws, req) => {
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
 		
-		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
-		console.log(data.mac + '-' + data.Com + '-' + data.V);
-		console.log(data.mac + '-' + data.Ack + '-' + data.ring );
+		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
+		console.log(data.mac + ' - ' + data.Com   + ' - ' + data.V);
+		console.log(data.mac + ' - ' + data.Ack   + ' - ' + data.ring );
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
