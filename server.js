@@ -75,6 +75,7 @@ wss.on('connection', (ws, req) => {
 		arduinoSocket = ws;
         
 		console.log("Arduino connecté !");
+		console.log(data.Com);
 		console.log(data.mac);
 		console.log(data.V);
 		console.log(data.Ack);
