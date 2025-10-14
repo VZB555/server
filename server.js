@@ -67,19 +67,14 @@ wss.on('connection', (ws, req) => {
 		}
 		/* FIN TELEGRAM */
 		  
-		  
+		arduinoSocket = ws;
+		
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
-		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
 		
-		arduinoSocket = ws;
-        
-		console.log("Arduino connecté !");
-		console.log(data.Com);
-		console.log(data.mac);
-		console.log(data.V);
-		console.log(data.Ack);
-		console.log(data.ring);
+		console.log("Dernier sensor_update :", lastSensorUpdateTime);  
+		console.log(data.mac + '-' + data.Com + '-' + data.V);
+		console.log(data.mac + '-' + data.Ack + '-' + data.ring );
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
