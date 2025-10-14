@@ -36,7 +36,7 @@ wss.on('connection', (ws, req) => {
       // Identification Arduino
       if (data.type === 'arduino') {
         arduinoSocket = ws;
-        console.log("Arduino connecté nouveau format !");
+        console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', msg: 'Arduino connecté au serveur' }));
       }
 
