@@ -120,9 +120,19 @@ wss.on('connection', (ws, req) => {
   ws.on('close', () => {
     console.log("Client déconnecté");
     clients = clients.filter(client => client !== ws);
-    if (ws === arduinoSocket) {
+    
+	if (ws === arduinoSocket) {
       arduinoSocket = null;
       console.log("Arduino déconnecté !");
     }
+	
+	for (const [mac, list] of Object.entries(browsers)) {
+      browsers[mac] = list.filter(c => c !== ws);
+      if (browsers[mac].length === 0) {
+        console.log("BROWSER_DECONNECT" + mac);		
+		delete browsers[mac];
+	  }
+    }
+	
   });
 });
