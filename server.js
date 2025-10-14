@@ -55,8 +55,8 @@ wss.on('connection', (ws, req) => {
 /* FIN NEW */ 		  
 		  
         clients.push(ws);
-        console.log("Navigateur connecté !");
-        ws.send(JSON.stringify({ type: 'server', msg: 'Navigateur connecté au serveur' }));
+        console.log("Navigateur connecté 2 !");
+        ws.send(JSON.stringify({ type: 'server', payload: 'Navigateur connecté au serveur' }));
 	
       }
 
