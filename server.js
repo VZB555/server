@@ -35,7 +35,7 @@ wss.on('connection', (ws, req) => {
 
       // Identification Arduino
       if (data.type === 'arduino') {
-        arduinoSocket = ws;
+    //    arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', msg: 'Arduino connecté au serveur' }));
       }
@@ -82,7 +82,7 @@ wss.on('connection', (ws, req) => {
 		}
 		/* FIN TELEGRAM */
 		  
-	//	arduinoSocket = ws;
+		arduinoSocket = ws;
 		
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
