@@ -13,6 +13,9 @@ const server = app.listen(PORT, () => {
 });
 
 // === SERVEUR WEBSOCKET ===
+const browsers = {};   // { mac: [WebSocket, WebSocket...] }
+
+
 const wss = new WebSocket.Server({ server });
 
 // Gestion des connexions
@@ -39,9 +42,21 @@ wss.on('connection', (ws, req) => {
 
       // Identification Frontend
       else if (data.type === 'browser') {
+
+/* NEW */ 	
+/*
+        if (!mac) return console.error("Browser sans MAC !");
+        if (!browsers[mac]) browsers[mac] = [];
+        browsers[mac].push(ws);
+
+        console.log(`🧭 Navigateur connecté pour Arduino ${mac}`);
+        ws.send(JSON.stringify({ type: 'server', msg: `Navigateur lié à ${mac}` }));	
+*/		  
+/* FIN NEW */ 		  
+		  
         clients.push(ws);
         console.log("Navigateur connecté !");
-        ws.send(JSON.stringify({ type: 'server', msg: 'Navigateur connecté au serveur' , V: lastVersion , lastUpdate: lastSensorUpdateTime }));
+        ws.send(JSON.stringify({ type: 'server', msg: 'Navigateur connecté au serveur' }));
 	
       }
 
