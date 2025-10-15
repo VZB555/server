@@ -17,6 +17,7 @@ const server = app.listen(PORT, () => {
 const arduinos = {};   // { mac: WebSocket }
 const browsers = {};   // { mac: [WebSocket, WebSocket...] }
 
+const temperatures = {};  
 
 const wss = new WebSocket.Server({ server });
 
@@ -44,7 +45,7 @@ wss.on('connection', (ws, req) => {
 /* FIN NEW */		
 		  
 		  
-        arduinoSocket = ws;
+//        arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' }));
       }
@@ -91,6 +92,8 @@ wss.on('connection', (ws, req) => {
 		}
 		/* FIN TELEGRAM */
 
+        temperatures[data.mac] = data.Temp;
+
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
 		
@@ -102,7 +105,7 @@ wss.on('connection', (ws, req) => {
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: data.Temp })); 
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: temperatures[data.mac]  })); 
 			}
 		  });
         }
