@@ -78,7 +78,7 @@ wss.on('connection', (ws, req) => {
 			const CHAT_ID = "578740783";          // ton chat_id
 			const MESSAGE = "Sonnerie a Nordmann";
 			
-			fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+			fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { 
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -90,27 +90,55 @@ wss.on('connection', (ws, req) => {
 		  console.log("Message Telegram Sonnerie");  
 		}
 		/* FIN TELEGRAM */
-		  
-		arduinoSocket = ws;
-		
+
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
 		
 		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
 		console.log(data.mac + ' - ' + data.Com   + ' - ' + data.Temp + ' - ' + data.V);
 		console.log(data.mac + ' - ' + data.Ack   + ' - ' + data.ring );
-        clients.forEach(client => {
-          if (client.readyState === WebSocket.OPEN) {
+        
+		 // Envoi aux browsers liés à ce MAC
+        if (browsers[data.mac]) {
+          browsers[data.mac].forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime })); 
+			}
+		  });
+        }
+		
+		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur' }));
+        return;
+/* OLD		
+		arduinoSocket = ws;
+		
+		clients.forEach(client => {
+        		if (client.readyState === WebSocket.OPEN) {
 			console.log("envoi de la Mac addreess au browser");
             client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
           }
         });
 		
 		arduinoSocket.send(JSON.stringify({ type: 'command', payload: 'recu du server' }));
+FIN OLD */		
       }
 
       // Message du navigateur → envoyer à l'Arduino
       else if (data.type === 'command') {
+	
+		if (!data.mac || !arduinos[data.mac]) {
+			console.log("⚠️ Arduino introuvable pour", data.mac);
+			return;
+		}
+        const target = arduinos[data.mac];
+        if (target.readyState === WebSocket.OPEN) {
+          target.send(JSON.stringify({ type: 'command', payload: data.payload }));
+          console.log(`💬 Commande envoyée à ${mac}:`, data.payload);
+        }
+        return;
+    }	
+
+/* OLD  		  
 		console.log("message du brower recu 1");
 		console.log(arduinoSocket.readyState);
         if (arduinoSocket && arduinoSocket.readyState === WebSocket.OPEN) {
@@ -118,7 +146,12 @@ wss.on('connection', (ws, req) => {
 		  console.log(data.payload);
 		  arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
         }
-      }
+
+FIN OLD */
+	  
+	  }
+	  
+	  
 
     } catch (e) {
       console.error("Erreur de parsing message :", e);
