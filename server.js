@@ -149,11 +149,12 @@ FIN OLD */
 
 FIN OLD */
 	  
-	  }
+//	  }
 	  
 	  
 
-    } catch (e) {
+    }
+	catch (e) {
       console.error("Erreur de parsing message :", e);
     }
   });
