@@ -102,7 +102,7 @@ wss.on('connection', (ws, req) => {
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime })); 
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: data.Temp })); 
 			}
 		  });
         }
