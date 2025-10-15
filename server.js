@@ -13,6 +13,8 @@ const server = app.listen(PORT, () => {
 });
 
 // === SERVEUR WEBSOCKET ===
+
+const arduinos = {};   // { mac: WebSocket }
 const browsers = {};   // { mac: [WebSocket, WebSocket...] }
 
 
@@ -35,6 +37,13 @@ wss.on('connection', (ws, req) => {
 
       // Identification Arduino
       if (data.type === 'arduino') {
+/* NEW */
+		if (!data.mac) return console.error("Arduino sans MAC !");
+        arduinos[data.mac] = ws;
+        console.log(`🔌 Arduino START : ${data.mac}`);		
+/* FIN NEW */		
+		  
+		  
         arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' }));
@@ -124,6 +133,13 @@ wss.on('connection', (ws, req) => {
 	if (ws === arduinoSocket) {
       arduinoSocket = null;
       console.log("Arduino déconnecté !");
+    }
+	
+	for (const [mac, socket] of Object.entries(arduinos)) {
+      if (socket === ws) {
+        console.log(`❌ Arduino déconnecté : ${mac}`);
+        delete arduinos[mac];
+      }
     }
 	
 	for (const [mac, list] of Object.entries(browsers)) {
