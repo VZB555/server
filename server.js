@@ -60,7 +60,7 @@ wss.on('connection', (ws, req) => {
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-        ws.send(JSON.stringify({ type: 'server', payload: `Navigateur lié à ${data.mac}` }));	
+        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] }));	
 	  
 /* FIN NEW */ 		  
 /*		  
