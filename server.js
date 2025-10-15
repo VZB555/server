@@ -21,8 +21,8 @@ const browsers = {};   // { mac: [WebSocket, WebSocket...] }
 const wss = new WebSocket.Server({ server });
 
 // Gestion des connexions
-let arduinoSocket = null; // stocke la connexion Arduino
-let clients = []; // liste des navigateurs connectés
+// let arduinoSocket = null;
+//let clients = []; // liste des navigateurs connectés
 let lastSensorUpdateTime = null;
 let lastVersion = null; 
 
@@ -59,14 +59,14 @@ wss.on('connection', (ws, req) => {
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-   //   ws.send(JSON.stringify({ type: 'server', msg: `Navigateur lié à ${mac}` }));	
+        ws.send(JSON.stringify({ type: 'server', payload: `Navigateur lié à ${data.mac}` }));	
 	  
 /* FIN NEW */ 		  
-		  
+/*		  
         clients.push(ws);
         console.log("Navigateur connecté 2 !");
         ws.send(JSON.stringify({ type: 'server', payload: 'Navigateur connecté au serveur' }));
-	
+*/	
       }
 
       // Message de l'Arduino → envoyer à tous les navigateurs
@@ -147,9 +147,10 @@ FIN OLD */
 		  arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
         }
 
+	}
 FIN OLD */
 	  
-//	  }
+
 	  
 	  
 
@@ -162,13 +163,13 @@ FIN OLD */
   // Gestion des déconnexions
   ws.on('close', () => {
     console.log("Client déconnecté");
-    clients = clients.filter(client => client !== ws);
-    
+//    clients = clients.filter(client => client !== ws);
+/*    
 	if (ws === arduinoSocket) {
       arduinoSocket = null;
       console.log("Arduino déconnecté !");
     }
-	
+*/	
 	for (const [mac, socket] of Object.entries(arduinos)) {
       if (socket === ws) {
         console.log(`❌ Arduino déconnecté : ${mac}`);
