@@ -73,7 +73,7 @@ wss.on('connection', (ws, req) => {
       else if (data.type === 'sensor_update') {
 		  
 		/* TELEGRAM */
-		if (data.ring === 1) {
+		if (data.Com === 'ring' ) {
 			const BOT_TOKEN = "8211651169:AAEZWvA_ShQErMaTytB5f5vH_dBorDDj0ng";   // ton token BotFather
 			const CHAT_ID = "578740783";          // ton chat_id
 			const MESSAGE = "Sonnerie a Nordmann";
