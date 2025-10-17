@@ -110,7 +110,7 @@ wss.on('connection', (ws, req) => {
 		  });
         }
 		
-		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  sleep: 60 }));
+		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  'sleep': 60 }));
         return;
 /* OLD		
 		arduinoSocket = ws;
