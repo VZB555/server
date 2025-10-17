@@ -40,8 +40,10 @@ wss.on('connection', (ws, req) => {
       if (data.type === 'arduino') {
         console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' , 'sleep': '600' }));
+		
 		// NEW 
-		data.type = 'sensor_update' ; 
+		temperatures[data.mac] = data.Temp;
+
       }
 
       // Identification Frontend
@@ -116,6 +118,9 @@ wss.on('connection', (ws, req) => {
           target.send(JSON.stringify({ type: 'command', payload: data.payload }));
           console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload  );
         }
+		
+		ws.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: temperatures[data.mac]  })); 
+		
         return;
     }	
 
