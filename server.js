@@ -136,7 +136,7 @@ FIN OLD */
         const target = arduinos[data.mac];
         if (target.readyState === WebSocket.OPEN) {
           target.send(JSON.stringify({ type: 'command', payload: data.payload }));
-          console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload , 'sleep': '60' );
+          console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload  );
         }
         return;
     }	
