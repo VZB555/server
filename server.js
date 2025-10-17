@@ -35,6 +35,7 @@ wss.on('connection', (ws, req) => {
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
+	   console.log("data.type = " + data.type);
 
       // Identification Arduino
       if (data.type === 'arduino') {
