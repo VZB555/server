@@ -120,7 +120,7 @@ wss.on('connection', (ws, req) => {
           console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload  );
         }
 		
-		ws.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: temperatures[data.mac]  })); 
+		//ws.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: temperatures[data.mac]  })); 
 		
         return;
     }	
