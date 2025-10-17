@@ -60,7 +60,7 @@ wss.on('connection', (ws, req) => {
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] }));	
+        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] , 'sleep': '60' }));	
 	  
 /* FIN NEW */ 		  
 /*		  
@@ -136,7 +136,7 @@ FIN OLD */
         const target = arduinos[data.mac];
         if (target.readyState === WebSocket.OPEN) {
           target.send(JSON.stringify({ type: 'command', payload: data.payload }));
-          console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload);
+          console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload , 'sleep': '60' );
         }
         return;
     }	
