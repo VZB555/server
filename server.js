@@ -43,6 +43,7 @@ wss.on('connection', (ws, req) => {
 		
 		// NEW 
 		temperatures[data.mac] = data.Temp;
+		console.log(data.Temp);
 
       }
 
