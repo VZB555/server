@@ -47,7 +47,7 @@ wss.on('connection', (ws, req) => {
 		  
 //        arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
-        ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' , 'sleep': 60 }));
+        ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' , 'sleep': '60' }));
       }
 
       // Identification Frontend
@@ -110,7 +110,7 @@ wss.on('connection', (ws, req) => {
 		  });
         }
 		
-		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  'sleep': 60 }));
+		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  'sleep': '60' }));
         return;
 /* OLD		
 		arduinoSocket = ws;
