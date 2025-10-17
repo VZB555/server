@@ -38,36 +38,25 @@ wss.on('connection', (ws, req) => {
 
       // Identification Arduino
       if (data.type === 'arduino') {
-/* NEW */
-		if (!data.mac) return console.error("Arduino sans MAC !");
-        arduinos[data.mac] = ws;
-        console.log(`🔌 Arduino START : ${data.mac}`);		
-/* FIN NEW */		
-		  
-		  
-//        arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
-        ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' , 'sleep': '60' }));
+        ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' , 'sleep': '600' }));
+		// NEW 
+		data.type = 'sensor_update' ; 
       }
 
       // Identification Frontend
       else if (data.type === 'browser') {
 
-/* NEW */ 	
+
 
         if (!data.mac) return console.error("Browser sans MAC !");
         if (!browsers[data.mac]) browsers[data.mac] = [];
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] , 'sleep': '60' }));	
+        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] , 'sleep': '600' }));	
 	  
-/* FIN NEW */ 		  
-/*		  
-        clients.push(ws);
-        console.log("Navigateur connecté 2 !");
-        ws.send(JSON.stringify({ type: 'server', payload: 'Navigateur connecté au serveur' }));
-*/	
+
       }
 
       // Message de l'Arduino → envoyer à tous les navigateurs
@@ -110,20 +99,9 @@ wss.on('connection', (ws, req) => {
 		  });
         }
 		
-		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  'sleep': '60' }));
+		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur',  'sleep': '600' }));
         return;
-/* OLD		
-		arduinoSocket = ws;
-		
-		clients.forEach(client => {
-        		if (client.readyState === WebSocket.OPEN) {
-			console.log("envoi de la Mac addreess au browser");
-            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
-          }
-        });
-		
-		arduinoSocket.send(JSON.stringify({ type: 'command', payload: 'recu du server' }));
-FIN OLD */		
+	
       }
 
       // Message du navigateur → envoyer à l'Arduino
@@ -141,20 +119,7 @@ FIN OLD */
         return;
     }	
 
-/* OLD  		  
-		console.log("message du brower recu 1");
-		console.log(arduinoSocket.readyState);
-        if (arduinoSocket && arduinoSocket.readyState === WebSocket.OPEN) {
-          console.log("message du brower recu 2");
-		  console.log(data.payload);
-		  arduinoSocket.send(JSON.stringify({ type: 'command', payload: data.payload }));
-        }
-
-	}
-FIN OLD */
-	  
-
-	  
+ 
 	  
 
     }
@@ -166,13 +131,7 @@ FIN OLD */
   // Gestion des déconnexions
   ws.on('close', () => {
     console.log("Client déconnecté");
-//    clients = clients.filter(client => client !== ws);
-/*    
-	if (ws === arduinoSocket) {
-      arduinoSocket = null;
-      console.log("Arduino déconnecté !");
-    }
-*/	
+	
 	for (const [mac, socket] of Object.entries(arduinos)) {
       if (socket === ws) {
         console.log(`❌ Arduino déconnecté : ${mac}`);
