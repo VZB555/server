@@ -63,6 +63,7 @@ wss.on('connection', (ws, req) => {
 
 		Device_temperatures[data.mac] = data.Temp;  
 		Device_lasttimeconnect[data.mac] = new Date().toISOString();
+		console.log(Device_temperatures[data.mac]  );
 		console.log(Device_sleep[data.mac]  );
 		console.log(Device_firmwareupgrade[data.mac]  );
 /*
@@ -80,7 +81,7 @@ wss.on('connection', (ws, req) => {
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-        ws.send(JSON.stringify({ type: 'server', Temp: temperatures[data.mac] , lastUpdate: lasttimearduinoconnect[data.mac]  }));	
+        ws.send(JSON.stringify({ type: 'server', Temp: Device_temperatures[data.mac] , lastUpdate: Device_lasttimeconnect[data.mac]  }));	
 	  
 
       }
@@ -107,21 +108,19 @@ wss.on('connection', (ws, req) => {
 		}
 		/* FIN TELEGRAM */
 
-        temperatures[data.mac] = data.Temp;
-
+		Device_temperatures[data.mac]  = data.Temp;
 		lastVersion = data.V;
-		lastSensorUpdateTime = new Date().toISOString();
-		lasttimearduinoconnect[data.mac] = new Date().toISOString();
-		
+		Device_lasttimeconnect[data.mac] = new Date().toISOString();
+/*		
 		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
 		console.log(data.mac + ' - ' + data.Com   + ' - ' + data.Temp + ' - ' + data.V);
 		console.log(data.mac + ' - ' + data.Ack   + ' - ' + data.ring );
-        
+*/        
 		 // Envoi aux browsers liés à ce MAC
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: Device_temperatures[data.mac]  })); 
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: Device_lasttimeconnect[data.mac], Temp: Device_temperatures[data.mac]  })); 
 			}
 		  });
         }
