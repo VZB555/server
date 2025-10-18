@@ -86,7 +86,7 @@ wss.on('connection', (ws, req) => {
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
 		console.log(Device_CommandeVersArduino[data.mac] );
-        ws.send(JSON.stringify({ type: 'server', Temp: Device_temperatures[data.mac] , lastUpdate: Device_lasttimeconnect[data.mac]  }));	
+        ws.send(JSON.stringify({ type: 'server', Temp: Device_temperatures[data.mac] , lastUpdate: Device_lasttimeconnect[data.mac] , V: Device_LastVersion[data.mac]  }));	
 	  
 
       }
