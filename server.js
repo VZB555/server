@@ -116,11 +116,7 @@ wss.on('connection', (ws, req) => {
 		Device_LastVersion[data.mac] = data.V;  
 		Device_temperatures[data.mac]  = data.Temp;
 		Device_lasttimeconnect[data.mac] = new Date().toISOString();
-/*		
-		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
-		console.log(data.mac + ' - ' + data.Com   + ' - ' + data.Temp + ' - ' + data.V);
-		console.log(data.mac + ' - ' + data.Ack   + ' - ' + data.ring );
-*/        
+
 		 // Envoi aux browsers liés à ce MAC
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
@@ -132,18 +128,7 @@ wss.on('connection', (ws, req) => {
 		
 		ws.send(JSON.stringify({ type: 'command', payload: 'OK reçu du serveur' }));
         return;
-/* OLD		
-		arduinoSocket = ws;
-		
-		clients.forEach(client => {
-        		if (client.readyState === WebSocket.OPEN) {
-			console.log("envoi de la Mac addreess au browser");
-            client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime }));
-          }
-        });
-		
-		arduinoSocket.send(JSON.stringify({ type: 'command', payload: 'recu du server' }));
-FIN OLD */		
+
       }
 
       // Message du navigateur → envoyer à l'Arduino
@@ -155,7 +140,7 @@ FIN OLD */
 		}
         const target = arduinos[data.mac];
         if (target.readyState === WebSocket.OPEN) {
-          target.send(JSON.stringify({ type: 'command', payload: data.payload }));
+          target.send(JSON.stringify({ type: 'command', payload: data.payload , sleep: Device_sleep[data.mac]  }));
           console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload);
         }
 		Device_CommandeVersArduino[data.mac] = data.payload ;
