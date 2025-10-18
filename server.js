@@ -158,6 +158,7 @@ FIN OLD */
           target.send(JSON.stringify({ type: 'command', payload: data.payload }));
           console.log(`💬 Commande envoyée à ${data.mac}:`, data.payload);
         }
+		Device_CommandeVersArduino[data.mac] = data.payload ;
         return;
     }	
 
