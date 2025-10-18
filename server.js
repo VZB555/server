@@ -23,11 +23,11 @@ const Device_lasttimeconnect = {};
 const Device_sleep = {};  
 const Device_firmwareupgrade = {};  
 const Device_LastVersion = {};  
+const Device_CommandeVersArduino = {};  
 
 Device_sleep['CC:50:E3:0C:D3:FD'] = 60;
-Device_firmwareupgrade['CC:50:E3:0C:D3:FD'] = 'NOTHING' ;
-
-
+Device_CommandeVersArduino['CC:50:E3:0C:D3:FD'] = 'NOTHING' ;
+Device_CommandeVersArduino['BC:DD:C2:14:82:3C'] = 'NOTHING' ;
 
 
 const wss = new WebSocket.Server({ server });
@@ -62,13 +62,15 @@ wss.on('connection', (ws, req) => {
 		Device_lasttimeconnect[data.mac] = new Date().toISOString();
 		console.log(Device_temperatures[data.mac]  );
 		console.log(Device_sleep[data.mac]  );
-		console.log(Device_firmwareupgrade[data.mac]  );
+		console.log(Device_CommandeVersArduino[data.mac]  );
 
 /*
         console.log(devices[data.mac].temperatures);
 		console.log(devices[data.mac].sleep);
 */
-        ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' }));
+        ws.send(JSON.stringify({ type: 'server', payload: Device_CommandeVersArduino[data.mac] }));
+		
+		Device_CommandeVersArduino[data.mac]  = '';
       }
 
       // Identification Frontend
@@ -78,9 +80,10 @@ wss.on('connection', (ws, req) => {
         if (!browsers[data.mac]) browsers[data.mac] = [];
         browsers[data.mac].push(ws);
 
+		Device_CommandeVersArduino[data.mac]  = data.payload;
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-		console.log(data.payload);
+		console.log(Device_CommandeVersArduino[data.mac] );
         ws.send(JSON.stringify({ type: 'server', Temp: Device_temperatures[data.mac] , lastUpdate: Device_lasttimeconnect[data.mac]  }));	
 	  
 
