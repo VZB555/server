@@ -18,6 +18,7 @@ const arduinos = {};   // { mac: WebSocket }
 const browsers = {};   // { mac: [WebSocket, WebSocket...] }
 
 const temperatures = {};  
+const lasttimearduinoconnect = {};  
 
 const wss = new WebSocket.Server({ server });
 
@@ -44,8 +45,9 @@ wss.on('connection', (ws, req) => {
         arduinos[data.mac] = ws;
         console.log(`🔌 Arduino START : ${data.mac}`);		
 /* FIN NEW */		
-		  
-		  
+		temperatures[data.mac] = data.Temp;  
+		lasttimearduinoconnect[data.mac] = new Date().toISOString();
+		
 //        arduinoSocket = ws;
         console.log('Arduino connecté nouveau format: ' , data.mac );
         ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' }));
@@ -61,7 +63,7 @@ wss.on('connection', (ws, req) => {
         browsers[data.mac].push(ws);
 
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
-        ws.send(JSON.stringify({ type: 'server', payload: temperatures[data.mac] }));	
+        ws.send(JSON.stringify({ type: 'server', Temp: temperatures[data.mac] , lastUpdate: lasttimearduinoconnect[data.mac]  }));	
 	  
 /* FIN NEW */ 		  
 /*		  
@@ -97,6 +99,7 @@ wss.on('connection', (ws, req) => {
 
 		lastVersion = data.V;
 		lastSensorUpdateTime = new Date().toISOString();
+		lasttimearduinoconnect[data.mac] = new Date().toISOString();
 		
 		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
 		console.log(data.mac + ' - ' + data.Com   + ' - ' + data.Temp + ' - ' + data.V);
