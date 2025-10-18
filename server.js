@@ -25,8 +25,8 @@ const Device_firmwareupgrade = {};
 const Device_LastVersion = {};  
 const Device_CommandeVersArduino = {};  
 
-Device_sleep['CC:50:E3:0C:D3:FD'] = 60;
-//Device_sleep['BC:DD:C2:14:82:3C'] = 60;
+Device_sleep['CC:50:E3:0C:D3:FD'] = 800;
+Device_sleep['BC:DD:C2:14:82:3C'] = 60;
 
 Device_CommandeVersArduino['CC:50:E3:0C:D3:FD'] = 'NOTHING' ;
 Device_CommandeVersArduino['BC:DD:C2:14:82:3C'] = 'NOTHING' ;
