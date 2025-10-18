@@ -17,8 +17,17 @@ const server = app.listen(PORT, () => {
 const arduinos = {};   // { mac: WebSocket }
 const browsers = {};   // { mac: [WebSocket, WebSocket...] }
 
-const temperatures = {};  
-const lasttimearduinoconnect = {};  
+
+const Device_temperatures = {};  
+const Device_lasttimeconnect = {};  
+const Device_sleep = {};  
+const Device_firmwareupgrade = {};  
+
+Device_sleep['BC:DD:C2:14:82:3C'] = 60;
+Device_firmwareupgrade['BC:DD:C2:14:82:3C'] = 1;
+
+
+
 
 const wss = new WebSocket.Server({ server });
 
@@ -40,23 +49,31 @@ wss.on('connection', (ws, req) => {
 
       // Identification Arduino
       if (data.type === 'arduino') {
-/* NEW */
+
 		if (!data.mac) return console.error("Arduino sans MAC !");
         arduinos[data.mac] = ws;
         console.log(`🔌 Arduino START : ${data.mac}`);		
-/* FIN NEW */		
+
+/*
 		temperatures[data.mac] = data.Temp;  
 		lasttimearduinoconnect[data.mac] = new Date().toISOString();
-		
-//        arduinoSocket = ws;
-        console.log('Arduino connecté nouveau format: ' , data.mac );
+*/
+        console.log('Arduino connecté nouveau format: ' , data.mac );		
+
+
+		Device_temperatures[data.mac] = data.Temp;  
+		Device_lasttimeconnect[data.mac] = new Date().toISOString();
+		console.log(Device_sleep[data.mac]  );
+		console.log(Device_firmwareupgrade[data.mac]  );
+/*
+        console.log(devices[data.mac].temperatures);
+		console.log(devices[data.mac].sleep);
+*/
         ws.send(JSON.stringify({ type: 'server', payload: 'Arduino connecté au serveur' }));
       }
 
       // Identification Frontend
       else if (data.type === 'browser') {
-
-/* NEW */ 	
 
         if (!data.mac) return console.error("Browser sans MAC !");
         if (!browsers[data.mac]) browsers[data.mac] = [];
@@ -65,12 +82,7 @@ wss.on('connection', (ws, req) => {
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
         ws.send(JSON.stringify({ type: 'server', Temp: temperatures[data.mac] , lastUpdate: lasttimearduinoconnect[data.mac]  }));	
 	  
-/* FIN NEW */ 		  
-/*		  
-        clients.push(ws);
-        console.log("Navigateur connecté 2 !");
-        ws.send(JSON.stringify({ type: 'server', payload: 'Navigateur connecté au serveur' }));
-*/	
+
       }
 
       // Message de l'Arduino → envoyer à tous les navigateurs
@@ -109,7 +121,7 @@ wss.on('connection', (ws, req) => {
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: temperatures[data.mac]  })); 
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: lastSensorUpdateTime, Temp: Device_temperatures[data.mac]  })); 
 			}
 		  });
         }
