@@ -25,7 +25,7 @@ const Device_firmwareupgrade = {};
 const Device_LastVersion = {};  
 
 Device_sleep['CC:50:E3:0C:D3:FD'] = 60;
-Device_firmwareupgrade['CC:50:E3:0C:D3:FD'] = 1;
+Device_firmwareupgrade['CC:50:E3:0C:D3:FD'] = 'NOTHING' ;
 
 
 
@@ -55,10 +55,6 @@ wss.on('connection', (ws, req) => {
         arduinos[data.mac] = ws;
         console.log(`🔌 Arduino START : ${data.mac}`);		
 
-/*
-		temperatures[data.mac] = data.Temp;  
-		lasttimearduinoconnect[data.mac] = new Date().toISOString();
-*/
         console.log('Arduino connecté nouveau format: ' , data.mac );		
 
 		Device_LastVersion[data.mac] = data.V;  
@@ -82,7 +78,9 @@ wss.on('connection', (ws, req) => {
         if (!browsers[data.mac]) browsers[data.mac] = [];
         browsers[data.mac].push(ws);
 
+
         console.log(`🧭 Navigateur connecté pour Arduino ${data.mac}`);
+		console.log(data.payload);
         ws.send(JSON.stringify({ type: 'server', Temp: Device_temperatures[data.mac] , lastUpdate: Device_lasttimeconnect[data.mac]  }));	
 	  
 
