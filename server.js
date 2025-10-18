@@ -22,9 +22,10 @@ const Device_temperatures = {};
 const Device_lasttimeconnect = {};  
 const Device_sleep = {};  
 const Device_firmwareupgrade = {};  
+const Device_LastVersion = {};  
 
-Device_sleep['BC:DD:C2:14:82:3C'] = 60;
-Device_firmwareupgrade['BC:DD:C2:14:82:3C'] = 1;
+Device_sleep['CC:50:E3:0C:D3:FD'] = 60;
+Device_firmwareupgrade['CC:50:E3:0C:D3:FD'] = 1;
 
 
 
@@ -34,8 +35,8 @@ const wss = new WebSocket.Server({ server });
 // Gestion des connexions
 // let arduinoSocket = null;
 //let clients = []; // liste des navigateurs connectés
-let lastSensorUpdateTime = null;
-let lastVersion = null; 
+//let lastSensorUpdateTime = null;
+//let lastVersion = null; 
 
 wss.on('connection', (ws, req) => {
   const ip = req.socket.remoteAddress;
@@ -60,12 +61,13 @@ wss.on('connection', (ws, req) => {
 */
         console.log('Arduino connecté nouveau format: ' , data.mac );		
 
-
+		Device_LastVersion[data.mac] = data.V;  
 		Device_temperatures[data.mac] = data.Temp;  
 		Device_lasttimeconnect[data.mac] = new Date().toISOString();
 		console.log(Device_temperatures[data.mac]  );
 		console.log(Device_sleep[data.mac]  );
 		console.log(Device_firmwareupgrade[data.mac]  );
+
 /*
         console.log(devices[data.mac].temperatures);
 		console.log(devices[data.mac].sleep);
@@ -108,8 +110,8 @@ wss.on('connection', (ws, req) => {
 		}
 		/* FIN TELEGRAM */
 
+		Device_LastVersion[data.mac] = data.V;  
 		Device_temperatures[data.mac]  = data.Temp;
-		lastVersion = data.V;
 		Device_lasttimeconnect[data.mac] = new Date().toISOString();
 /*		
 		console.log(data.mac + ' - sensor_update' + ' - ' + lastSensorUpdateTime);  
@@ -120,7 +122,7 @@ wss.on('connection', (ws, req) => {
         if (browsers[data.mac]) {
           browsers[data.mac].forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
-               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: lastVersion , Ack: data.Ack, lastUpdate: Device_lasttimeconnect[data.mac], Temp: Device_temperatures[data.mac]  })); 
+               client.send(JSON.stringify({ type: 'arduino_data', mac: data.mac , V: Device_LastVersion[data.mac] , Ack: data.Ack, lastUpdate: Device_lasttimeconnect[data.mac], Temp: Device_temperatures[data.mac]  })); 
 			}
 		  });
         }
